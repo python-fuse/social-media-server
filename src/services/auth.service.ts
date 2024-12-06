@@ -21,7 +21,7 @@ class AuthService {
 
       if (isPasswordValid) {
         const token = await tokenService.generateToken(
-          { id: user.id },
+          { user },
           JWT_SECRET,
           "1d"
         );

@@ -9,10 +9,7 @@ import {
 } from "../controllers/posts.controller";
 import { validateRequest } from "../middlewares/validation.middleware";
 import { postValidation } from "../utils/validation";
-import {
-  authorizeOwner,
-  authorizeUser,
-} from "../middlewares/authorization.middleware";
+import { authorizeOwner } from "../middlewares/authorization.middleware";
 
 const router = Router();
 
