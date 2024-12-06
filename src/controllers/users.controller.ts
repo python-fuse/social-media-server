@@ -1,45 +1,60 @@
 import { Request, Response } from "express";
-import prisma from "../utils/prisma";
+import userService from "../services/user.service";
 
 export const getUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await prisma.user.findUnique({ where: { id: +id } });
+  const user = await userService.findById(+id);
+  if (!user) {
+    res.status(404);
+  }
   res.json(user);
 };
 
 export const getUsers = async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany();
+  const users = await userService.findAll();
+
+  if (users.length === 0) {
+    res.status(404);
+  }
+
   res.json(users);
 };
 
 export const createUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
-  const user = await prisma.user.create({
-    data: {
-      username: name,
+  const { username, email, password } = req.body;
+  try {
+    const user = await userService.create({
+      username,
       email,
       password,
-    },
-  });
-  res.status(201).json(user);
+    });
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
 };
 
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, email, password } = req.body;
-  const user = await prisma.user.update({
-    where: { id: +id },
-    data: {
-      username: name,
+  try {
+    const user = await userService.update(+id, {
+      name,
       email,
       password,
-    },
-  });
-  res.status(200).json(user);
+    });
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await prisma.user.delete({ where: { id: +id } });
-  res.status(204).json(user);
+  try {
+    await userService.delete(+id);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
 };
