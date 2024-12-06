@@ -16,6 +16,7 @@ interface IPOSTValidation {
   create: ValidationChain[];
   update: ValidationChain[];
   get: ValidationChain[];
+  authorGet: ValidationChain[];
 }
 
 interface IValidationResponse {
@@ -25,7 +26,7 @@ interface IValidationResponse {
 
 export const userValidation: IUserValidation = {
   create: [
-    body("name")
+    body("username")
       .isString()
       .isLength({ min: 3, max: 255 })
       .withMessage(
@@ -40,7 +41,7 @@ export const userValidation: IUserValidation = {
       ),
   ],
   update: [
-    body("name")
+    body("username")
       .optional()
       .isString()
       .isLength({ min: 3, max: 255 })
@@ -64,12 +65,14 @@ export const userValidation: IUserValidation = {
 
 export const postValidation: IPOSTValidation = {
   create: [
+    body("authorId").toInt().isInt(),
     body("title").isString().isLength({ min: 5, max: 255 }),
     body("content").isString().isLength({ min: 5 }),
   ],
   update: [
-    body("title").isString().isLength({ min: 5, max: 255 }),
-    body("content").isString().isLength({ min: 5 }),
+    body("title").optional().isString().isLength({ min: 5, max: 255 }),
+    body("content").optional().isString().isLength({ min: 5 }),
   ],
   get: [param("id").toInt().isInt()],
+  authorGet: [param("authorId").toInt().isInt()],
 };
