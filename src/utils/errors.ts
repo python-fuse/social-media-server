@@ -9,6 +9,7 @@ class BadRequestError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "BadRequestError";
+    this.message = message;
   }
 }
 
@@ -61,6 +62,12 @@ class ValidationError extends Error {
   }
 }
 
+class ExistingAccountError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
 export {
   NotFoundError,
   BadRequestError,
@@ -71,4 +78,5 @@ export {
   ServiceUnavailableError,
   TooManyRequestsError,
   ValidationError,
+  ExistingAccountError,
 };

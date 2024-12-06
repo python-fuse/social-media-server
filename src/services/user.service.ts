@@ -6,6 +6,15 @@ class UserService extends ModelService<User> {
   constructor() {
     super(prisma.user);
   }
+
+  findUserByEmail = async (email: string) => {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+    return user;
+  };
 }
 
 export default new UserService();
